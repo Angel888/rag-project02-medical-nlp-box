@@ -37,8 +37,12 @@ class StdService:
             'bedrock': EmbeddingProvider.BEDROCK,
             'huggingface': EmbeddingProvider.HUGGINGFACE
         }
-        
-        # 创建 embedding 函数
+        # 使用枚举看起来多此一举，其实有以下考虑
+        # 1 枚举是强类型：使用枚举可以在编译/静态类型检查时发现错误，而不是等到运行时；防止拼写错误：如果直接使用字符串，可能会因为拼写错误（如 "hugginface" 而不是 "huggingface"）导致难以追踪的bug
+        # 2  代码维护性和可靠性；枚举在 EmbeddingProvider 类中定义了所有有效的嵌入提供商
+        # 3 更好的设计模式：工厂模式支持：在 EmbeddingFactory 中，使用枚举使得条件分支更清晰：
+        # 接口与实现分离：用户界面使用友好的字符串，而内部实现使用强类型枚举，实现了关注点分离
+
         embedding_provider = provider_mapping.get(provider.lower())
         if embedding_provider is None:
             raise ValueError(f"Unsupported provider: {provider}")

@@ -24,7 +24,7 @@ const CorrPage = () => {
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://172.20.116.213:8000/api/corr', {
+      const response = await fetch('http://127.0.0.1:8001/api/corr', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

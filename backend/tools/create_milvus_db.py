@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 import torch    
 from pymilvus import MilvusClient, DataType, FieldSchema, CollectionSchema
+from sentence_transformers import SentenceTransformer, SentenceTransformerTrainer, losses
 
 # 设置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -27,7 +28,7 @@ embedding_function = model.dense.SentenceTransformerEmbeddingFunction(
 
 # 文件路径
 file_path = "backend/data/SNOMED_5000.csv"
-db_path = "backend/db/snomed_bge_m3.db"
+db_path = "backend/db/snomed_bge_m3_1.db"
 
 # 连接到 Milvus
 client = MilvusClient(db_path)
@@ -43,6 +44,8 @@ df = pd.read_csv(file_path,
                  ).fillna("NA")
 
 # 获取向量维度（使用一个样本文档）
+# "Sample Text" 是一个示例文本，用于调用 embedding_function 生成一个嵌入向量。
+# 生成的嵌入向量用于动态确定嵌入模型的输出维度（vector_dim），从而在创建 Milvus 集合时正确设置向量字段的维度
 sample_doc = "Sample Text"
 sample_embedding = embedding_function([sample_doc])[0]
 vector_dim = len(sample_embedding)

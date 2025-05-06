@@ -83,7 +83,7 @@ const NERPage = () => {
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://172.20.116.213:8000/api/ner', {
+      const response = await fetch('http://127.0.0.1:8001/api/ner', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

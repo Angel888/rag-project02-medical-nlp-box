@@ -5,6 +5,8 @@ from typing import Dict, List
 import os
 import logging
 
+from langchain_openai import AzureChatOpenAI
+
 # 配置日志
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -36,10 +38,17 @@ class GenService:
         if provider == "ollama":
             return Ollama(model=model)
         elif provider == "openai":
-            return ChatOpenAI(
-                model=model,
-                temperature=0.7,  # 稍微提高温度以获得更有创意的输出
-                api_key=os.getenv("OPENAI_API_KEY")
+            return AzureChatOpenAI(
+                azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),  # or your base URL
+                azure_deployment=os.getenv("AZURE_OPENAI_API_KEY"),  # or your deployment
+                api_version=os.getenv("AZURE_CHAT_OPENAI_API_VERSION"),  # or your api version
+                model=os.getenv("AZURE_OPENAI_MODEL_NAME"),  # or your model name
+              # or your API key
+                temperature=0,
+                max_tokens=None,
+                timeout=None,
+                max_retries=2,
+                # other params...
             )
         else:
             raise ValueError(f"Unsupported LLM provider: {provider}")

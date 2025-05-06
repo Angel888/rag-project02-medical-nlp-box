@@ -12,7 +12,8 @@ import logging
 # 配置日志
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
+import dotenv
+dotenv.load_dotenv()
 # 创建 FastAPI 应用
 app = FastAPI()
 
